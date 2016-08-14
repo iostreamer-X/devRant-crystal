@@ -11,7 +11,7 @@ module DevRant
       app.call(request)
     end
   end
-  
+
   API = "https://www.devrant.io/api"
   COSSACK = Cossack::Client.new(API) do |client|
     client.use AppIdMiddleware
@@ -20,6 +20,14 @@ module DevRant
   def getIdByUsername(username : String)
     params = {"username"=>username}
     response = COSSACK.get("/get-user-id", params)
-    return JSON.parse(response.body)["user_id"]
+    return JSON.parse(response.body)["user_id"].to_s
+  end
+
+  def getIdByUsernameAsync(username : String, proc : Proc(String, _))
+    spawn do
+      params = {"username"=>username}
+      response = COSSACK.get("/get-user-id", params)
+      proc.call JSON.parse(response.body)["user_id"].to_s
+    end
   end
 end
