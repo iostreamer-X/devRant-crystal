@@ -6,9 +6,9 @@ module DevRant
   extend self
 
   macro makeAsync(function, name, type)
-    def {{name.id}}(result : {{type}}, &callback : {{type}} -> )
+    def {{name.id}}(arg : {{type[0]}}, &callback : {{type[1]}} -> )
       spawn do
-        callback.call {{function.id}}(result)
+        callback.call {{function.id}}(arg)
       end
     end
   end
@@ -16,7 +16,15 @@ module DevRant
   class AppIdMiddleware < Cossack::Middleware
     def call(request)
       request.uri = URI.parse "#{request.uri}&app=3"
-      app.call(request)
+      app.call(request).tap do |response|
+        result = JSON.parse response.body
+        if (result["success"].to_s == "false")
+          raise "#{request.uri} failed"
+        end
+        if (result["error"]?)
+          raise "#{request.uri} failed"
+        end
+      end
     end
   end
 
@@ -30,5 +38,21 @@ module DevRant
     response = COSSACK.get("/get-user-id", params)
     return JSON.parse(response.body)["user_id"].to_s
   end
-  makeAsync :getIdByUsername, :getIdByUsernameAsync, String
+  makeAsync :getIdByUsername, :getIdByUsernameAsync, {String, String}
+
+  def getRants(params = {"sort"=>"recent", "limit"=>"50", "skip"=>"0"})
+    if (params.size == 0)
+      params = {"sort"=>"recent", "limit"=>"50", "skip"=>"0"}
+    end
+    response = COSSACK.get("/devrant/rants", params)
+    return JSON.parse(response.body).["rants"]
+  end
+  makeAsync :getRants, :getRantsAsync, {Hash(String, String), JSON::Any}
+
+  def getRantFromId(id : String)
+    response = COSSACK.get("/devrant/rants/#{id}?")
+    return JSON.parse(response.body).["rant"]
+  end
+  makeAsync :getRantFromId, :getRantFromIdAsync, {String, JSON::Any}
+
 end
