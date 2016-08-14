@@ -55,4 +55,18 @@ module DevRant
   end
   makeAsync :getRantFromId, :getRantFromIdAsync, {String, JSON::Any}
 
+  def search(term : String)
+    params = {"term" => term}
+    response = COSSACK.get("/devrant/search", params)
+    return JSON.parse(response.body).["results"]
+  end
+  makeAsync :search, :searchAsync, {String, JSON::Any}
+
+  def getProfile(username : String)
+    id = getIdByUsername username
+    response = COSSACK.get("/users/#{id}?")
+    return JSON.parse(response.body).["profile"]
+  end
+  makeAsync :getProfile, :getProfileAsync, {String, JSON::Any}
+
 end

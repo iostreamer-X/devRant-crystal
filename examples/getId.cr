@@ -19,5 +19,20 @@ DevRant.getRantFromIdAsync "141356" do |rant|
 end
 
 puts DevRant.getRantFromId "141356"
+
+
+DevRant.searchAsync "iostreamer" do |results|
+  puts results[0]
+end
+
+puts DevRant.search("iostreamer")[0]
+
+
+DevRant.getProfileAsync "coookie" do |profile|
+  puts profile["username"]
+end
+
+puts DevRant.getProfile("coookie")["username"]
+
 #To get this example working, we need to sleep
 sleep
