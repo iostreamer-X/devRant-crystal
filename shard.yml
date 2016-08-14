@@ -5,3 +5,8 @@ authors:
   - iostreamer-X <iostreamer007@gmail.com>
 
 license: MIT
+
+dependencies:
+  cossack:
+    github: greyblake/crystal-cossack
+    version: ~> 0.1
