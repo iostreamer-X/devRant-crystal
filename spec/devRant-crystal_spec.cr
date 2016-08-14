@@ -4,13 +4,11 @@ require "json"
 describe DevRant do
 
   it "getIdByUsernameAsync" do
-    id = nil
+    channel = Channel(String).new
     DevRant.getIdByUsernameAsync "coookie" do |user_id|
-      puts user_id
-      id = user_id
+      channel.send user_id
     end
-    sleep 2.seconds
-    id.should eq "82833"
+    channel.receive.should eq "82833"
   end
 
   it "getIdByUsername" do
