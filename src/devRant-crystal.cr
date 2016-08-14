@@ -5,6 +5,14 @@ require "json"
 module DevRant
   extend self
 
+  macro makeAsync(function, name)
+    def {{name.id}}(username : String, proc : Proc(String, _))
+      spawn do
+        proc.call {{function.id}}(username)
+      end
+    end
+  end
+
   class AppIdMiddleware < Cossack::Middleware
     def call(request)
       request.uri = URI.parse "#{request.uri}&app=3"
@@ -22,12 +30,5 @@ module DevRant
     response = COSSACK.get("/get-user-id", params)
     return JSON.parse(response.body)["user_id"].to_s
   end
-
-  def getIdByUsernameAsync(username : String, proc : Proc(String, _))
-    spawn do
-      params = {"username"=>username}
-      response = COSSACK.get("/get-user-id", params)
-      proc.call JSON.parse(response.body)["user_id"].to_s
-    end
-  end
+  makeAsync :getIdByUsername, :getIdByUsernameAsync
 end
