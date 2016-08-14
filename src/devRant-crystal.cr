@@ -6,9 +6,9 @@ module DevRant
   extend self
 
   macro makeAsync(function, name)
-    def {{name.id}}(username : String, proc : Proc(String, _))
+    def {{name.id}}(username : String, &callback : String -> )
       spawn do
-        proc.call {{function.id}}(username)
+        callback.call {{function.id}}(username)
       end
     end
   end
