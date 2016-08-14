@@ -1,6 +1,8 @@
 # devRant-crystal
 
-A crystal wrapper for devRant API 
+A crystal wrapper for devRant API
+
+![](https://travis-ci.org/iostreamer-X/devRant-crystal.svg?branch=master)
 
 ## Installation
 
