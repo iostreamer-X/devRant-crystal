@@ -4,6 +4,10 @@ A crystal wrapper for devRant API
 
 ![](https://travis-ci.org/iostreamer-X/devRant-crystal.svg?branch=master)
 
+Heavily inspired(and in a way ported) from [danillouz/devrant](https://github.com/danillouz/devrant)
+
+![I pretty much copied everything from danillouz/devrant](https://raw.githubusercontent.com/danillouz/devrant/master/img/devrant.png)
+
 ## Installation
 
 
@@ -18,7 +22,8 @@ dependencies:
 
 ## Usage
 ```crystal
-  DevRant.method
+require "devRant-crystal"
+DevRant.method
 ```
 Each method also has an async verion, which has 'Async' appended to the method name.
 ```crystal
@@ -193,7 +198,7 @@ used:
 
 ## Examples
 
-You can see all these functions in actions [here](https://github.com/iostreamer-X/devRant-crystal/blob/master/examples/basic.cr)
+You can see all these functions in action [here](https://github.com/iostreamer-X/devRant-crystal/blob/master/examples/basic.cr)
 
 
 #### Fetch rant with id `141356` in async manner
@@ -223,7 +228,7 @@ end
 
 #### Fetch all rants that match the search term `javascript`
 ```crystal
-puts DevRant.search("iostreamer")[0]
+puts DevRant.search("javascript")[0]
 ```
 
 #### Fetch the profile of the devRant user with username `dfox` in async manner
