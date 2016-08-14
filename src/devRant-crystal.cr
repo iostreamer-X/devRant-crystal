@@ -5,10 +5,10 @@ require "json"
 module DevRant
   extend self
 
-  macro makeAsync(function, name)
-    def {{name.id}}(username : String, &callback : String -> )
+  macro makeAsync(function, name, type)
+    def {{name.id}}(result : {{type}}, &callback : {{type}} -> )
       spawn do
-        callback.call {{function.id}}(username)
+        callback.call {{function.id}}(result)
       end
     end
   end
@@ -30,5 +30,5 @@ module DevRant
     response = COSSACK.get("/get-user-id", params)
     return JSON.parse(response.body)["user_id"].to_s
   end
-  makeAsync :getIdByUsername, :getIdByUsernameAsync
+  makeAsync :getIdByUsername, :getIdByUsernameAsync, String
 end
