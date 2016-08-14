@@ -1,6 +1,6 @@
 # devRant-crystal
 
-TODO: Write a description here
+A crystal wrapper for devRant API 
 
 ## Installation
 
